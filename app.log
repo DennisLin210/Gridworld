@@ -1,0 +1,33 @@
+2024-05-04 03:41:12,424:INFO:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-04 03:41:12,425:INFO:[33mPress CTRL+C to quit[0m
+2024-05-04 03:41:12,435:INFO: * Restarting with watchdog (windowsapi)
+2024-05-04 03:41:12,663:WARNING: * Debugger is active!
+2024-05-04 03:41:12,669:INFO: * Debugger PIN: 597-055-253
+2024-05-04 03:41:19,975:INFO:127.0.0.1 - - [04/May/2024 03:41:19] "POST / HTTP/1.1" 200 -
+2024-05-04 03:41:28,062:INFO:127.0.0.1 - - [04/May/2024 03:41:28] "[31m[1mPOST /run_q_learning HTTP/1.1[0m" 400 -
+2024-05-04 03:47:13,501:INFO:127.0.0.1 - - [04/May/2024 03:47:13] "[31m[1mPOST /run_q_learning HTTP/1.1[0m" 400 -
+2024-05-04 03:48:07,695:INFO: * Detected change in 'c:\\NCHU\\DeepRL\\Qlearning\\app.py', reloading
+2024-05-04 03:48:07,697:INFO: * Detected change in 'c:\\NCHU\\DeepRL\\Qlearning\\app.py', reloading
+2024-05-04 03:48:07,698:INFO: * Detected change in 'c:\\NCHU\\DeepRL\\Qlearning\\app.py', reloading
+2024-05-04 03:48:07,700:INFO: * Detected change in 'c:\\NCHU\\DeepRL\\Qlearning\\app.py', reloading
+2024-05-04 03:48:08,759:INFO: * Restarting with watchdog (windowsapi)
+2024-05-04 03:48:09,027:WARNING: * Debugger is active!
+2024-05-04 03:48:09,031:INFO: * Debugger PIN: 597-055-253
+2024-05-04 03:48:14,897:INFO:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-04 03:48:14,897:INFO:[33mPress CTRL+C to quit[0m
+2024-05-04 03:48:14,907:INFO: * Restarting with watchdog (windowsapi)
+2024-05-04 03:48:15,145:WARNING: * Debugger is active!
+2024-05-04 03:48:15,150:INFO: * Debugger PIN: 597-055-253
+2024-05-04 03:48:31,071:INFO:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-05-04 03:48:31,072:INFO:[33mPress CTRL+C to quit[0m
+2024-05-04 03:48:31,081:INFO: * Restarting with watchdog (windowsapi)
+2024-05-04 03:48:31,311:WARNING: * Debugger is active!
+2024-05-04 03:48:31,316:INFO: * Debugger PIN: 597-055-253
+2024-05-04 03:48:56,940:INFO: * Detected change in 'c:\\NCHU\\DeepRL\\Qlearning\\app.py', reloading
+2024-05-04 03:48:56,941:INFO: * Detected change in 'c:\\NCHU\\DeepRL\\Qlearning\\app.py', reloading
+2024-05-04 03:48:56,942:INFO: * Detected change in 'c:\\NCHU\\DeepRL\\Qlearning\\app.py', reloading
+2024-05-04 03:48:56,942:INFO: * Detected change in 'c:\\NCHU\\DeepRL\\Qlearning\\app.py', reloading
+2024-05-04 03:48:57,994:INFO: * Restarting with watchdog (windowsapi)
