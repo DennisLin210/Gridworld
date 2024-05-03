@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Grid World</title>
+  <style>
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat({{ size }}, 1fr);
+      gap: 10px;
+    }
+    .grid-cell {
+      border: 1px solid black;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      background-color: white;  /* Default road color */
+    }
+    .start { background-color: green; }
+    .end { background-color: blue; }
+    .obstacle { background-color: grey; }
+    .penalty { background-color: red; }
+  </style>
+  
+</head>
+<body>
+  <h1>Grid World</h1>
+  <div class="grid-container">
+    {% for i in range(size * size) %}
+      <div class="grid-cell" id="cell-{{ i }}" onclick="changeState(this)"></div>
+    {% endfor %}
+  </div>
+
+  <div id="message"></div>
+  <button onclick="validateGrid()">Check Grid</button>
+  
+
+  <script>
+    function changeState(cell) {
+      const classes = ["start", "end", "obstacle", "penalty", "road"];
+      let currentClass = cell.className.split(' ').find(cls => classes.includes(cls));
+      let currentIndex = classes.indexOf(currentClass);
+      let nextStateIndex = (currentIndex + 1) % classes.length;
+  
+      // Remove the current class if it exists
+      if (currentClass) {
+        cell.classList.remove(currentClass);
+      }
+  
+      // Add the next class
+      cell.classList.add(classes[nextStateIndex]);
+    }
+  
+  </script>
+  <script>
+    function validateGrid() {
+      const maxObstacles = {{ size }} - 2;  // Maximum allowed obstacles
+      let starts = document.querySelectorAll('.start').length;
+      let ends = document.querySelectorAll('.end').length;
+      let obstacles = document.querySelectorAll('.obstacle').length;
+      let message = "";
+  
+      if (starts !== 1 || ends !== 1) {
+        message = "There must be exactly one starting cell and one ending cell. ";
+      }
+  
+      if (obstacles > maxObstacles) {
+        message += "At most " + maxObstacles + " obstacle(s) allowed.";
+      }
+  
+      if (message === "") {
+        message = "Grid is valid!";
+        const cells = document.querySelectorAll('.grid-cell');
+        const states = Array.from(cells).map(cell => cell.className.split(' ')[0] || "road");
+  
+        // Send AJAX request
+        fetch('/validate_grid', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({states: states})
+        })
+        .then(response => response.json())
+        .then(data => console.log(data.message))
+        .catch(error => console.error('Error:', error));
+      }
+  
+      document.getElementById('message').textContent = message;
+    }
+  </script>
+  
+  
+</html>
