@@ -64,35 +64,29 @@
       let ends = document.querySelectorAll('.end').length;
       let obstacles = document.querySelectorAll('.obstacle').length;
       let message = "";
-  
+    
       if (starts !== 1 || ends !== 1) {
         message = "There must be exactly one starting cell and one ending cell. ";
       }
-  
+    
       if (obstacles > maxObstacles) {
         message += "At most " + maxObstacles + " obstacle(s) allowed.";
       }
-  
+    
       if (message === "") {
         message = "Grid is valid!";
         const cells = document.querySelectorAll('.grid-cell');
-        const states = Array.from(cells).map(cell => cell.className.split(' ')[0] || "road");
-  
-        // Send AJAX request
-        fetch('/validate_grid', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({states: states})
-        })
-        .then(response => response.json())
-        .then(data => console.log(data.message))
-        .catch(error => console.error('Error:', error));
+        const states = Array.from(cells).map(cell => {
+          const stateClass = cell.classList.value.split(' ').find(cls => cls === 'start' || cls === 'end' || cls === 'obstacle' || cls === 'penalty' || cls === 'road');
+          return stateClass || 'road';  // 使用 'road' 作为默认状态
+        });
+    
+        console.log(states);  // 打印 states 陣列到控制台
       }
-  
+    
       document.getElementById('message').textContent = message;
     }
+    
   </script>
   
   
