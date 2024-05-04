@@ -82,9 +82,32 @@
         });
     
         console.log(states);  // 打印 states 陣列到控制台
-      }
     
-      document.getElementById('message').textContent = message;
+        // 发送 AJAX 请求到服务器
+        fetch('/validate_grid', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({states: states})
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data.message);  // 从服务器返回的消息
+          document.getElementById('message').textContent = data.message; // 显示服务器返回的消息
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('message').textContent = 'An error occurred';
+        });
+      } else {
+        document.getElementById('message').textContent = message;
+      }
     }
     
   </script>
