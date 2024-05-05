@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -10,10 +11,13 @@ def home():
 
 @app.route('/validate_grid', methods=['POST'])
 def validate_grid():
-    cell_states = request.json.get('states')
-    # Here, you can process the cell_states as needed
-    print(cell_states)  # Example action
-    return jsonify({"message": "Data received!"})
+    if request.is_json:
+        cell_states = request.get_json().get('states')
+        print("Received cell states:", cell_states)  # 打印接收到的数据
+        return jsonify({"message": "Data received!"})
+    else:
+        print("No JSON received")  # 如果没有接收到 JSON，打印提示
+        return jsonify({"message": "No data received"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
