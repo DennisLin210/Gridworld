@@ -18,6 +18,9 @@
       align-items: center;
       justify-content: center;
       background-color: white; /* Default road color */
+      font-size: 24px; /* Larger font size for visibility */
+      font-weight: bold; /* Bold to highlight directions */
+      text-align: center; /* Center align text for aesthetics */
     }
     .start { background-color: green; }
     .end { background-color: blue; }
@@ -39,6 +42,8 @@
   <div id="message"></div>
   <button onclick="validateGrid()">Check Grid</button>
   
+  <button id="startQ" onclick="startQLearning()">Start Q-Learning</button>
+
 
   <script>
     function changeState(cell) {
@@ -47,70 +52,90 @@
       let currentIndex = classes.indexOf(currentClass);
       let nextStateIndex = (currentIndex + 1) % classes.length;
   
-      // Remove the current class if it exists
       if (currentClass) {
         cell.classList.remove(currentClass);
       }
   
-      // Add the next class
       cell.classList.add(classes[nextStateIndex]);
+  
+      document.getElementById('startQ').disabled = true; // Disable Start Q-Learning button on state change
     }
   
   </script>
   <script>
     function validateGrid() {
-      const maxObstacles = {{ size }} - 2;  // Maximum allowed obstacles
+      const maxObstacles = {{ size }} - 2;
       let starts = document.querySelectorAll('.start').length;
       let ends = document.querySelectorAll('.end').length;
       let obstacles = document.querySelectorAll('.obstacle').length;
       let message = "";
-    
+  
       if (starts !== 1 || ends !== 1) {
         message = "There must be exactly one starting cell and one ending cell. ";
       }
-    
+  
       if (obstacles > maxObstacles) {
         message += "At most " + maxObstacles + " obstacle(s) allowed.";
       }
-    
+  
       if (message === "") {
-        message = "Grid is valid!";
-        const cells = document.querySelectorAll('.grid-cell');
-        const states = Array.from(cells).map(cell => {
-          const stateClass = cell.classList.value.split(' ').find(cls => cls === 'start' || cls === 'end' || cls === 'obstacle' || cls === 'penalty' || cls === 'road');
-          return stateClass || 'road';  // 使用 'road' 作为默认状态
-        });
-    
-        console.log(states);  // 打印 states 陣列到控制台
-    
-        // 发送 AJAX 请求到服务器
-        fetch('/validate_grid', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({states: states})
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log(data.message);  // 从服务器返回的消息
-          document.getElementById('message').textContent = data.message; // 显示服务器返回的消息
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          document.getElementById('message').textContent = 'An error occurred';
-        });
+        document.getElementById('message').textContent = "Grid is valid!";
+        document.getElementById('startQ').disabled = false; // Enable Start Q-Learning button if valid
       } else {
         document.getElementById('message').textContent = message;
       }
     }
-    
   </script>
+  
+  <script>
+    function startQLearning() {
+      const cells = document.querySelectorAll('.grid-cell');
+      const states = Array.from(cells).map(cell => {
+        const stateClass = cell.classList.value.split(' ').find(cls =>
+          cls === 'start' || cls === 'end' || cls === 'obstacle' || cls === 'penalty' || cls === 'road');
+        return stateClass || 'road';  // Use 'road' as the default state
+      });
+    
+      const gridSize = {{ size }};
+      fetch('/start-q-learning', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ n: gridSize, states: states })
+      })
+      .then(response => response.json())
+      .then(data => {
+        const { policy } = data;
+        for (let i = 0; i < gridSize; i++) {
+          for (let j = 0; j < gridSize; j++) {
+            const index = i * gridSize + j;
+            const direction = policy[i][j];
+            let arrow = '';
+            const cellState = cells[index].classList.value;
+    
+            // Only add arrows if the cell is not a start, end, or obstacle
+            if (!cellState.includes('start') && !cellState.includes('end') && !cellState.includes('obstacle')) {
+              switch (direction) {
+                case 0: arrow = '←'; break; // Left
+                case 1: arrow = '→'; break; // Right
+                case 2: arrow = '↑'; break; // Up
+                case 3: arrow = '↓'; break; // Down
+              }
+            }
+            cells[index].textContent = arrow;  // Set text content to either an arrow or empty
+          }
+        }
+        document.getElementById('message').textContent = "Q-Learning completed.";
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').textContent = 'An error occurred during Q-Learning.';
+      });
+    }
+    
+    </script>
+    
   
   
 </html>
